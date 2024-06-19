@@ -1,6 +1,6 @@
 ---
 title: "Preview Mode for Static Generation"
-excerpt: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Praesent elementum facilisis leo vel fringilla est ullamcorper eget. At imperdiet dui accumsan sit amet nulla facilities morbi tempus."
+excerpt: "Learn how to implement preview mode in Next.js to allow content editors to see changes before they go live. This guide covers the setup and benefits of using preview mode with static generation."
 coverImage: "/assets/blog/preview/cover.jpg"
 date: "2020-03-16T05:35:07.322Z"
 author:
@@ -10,10 +10,95 @@ ogImage:
   url: "/assets/blog/preview/cover.jpg"
 ---
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Praesent elementum facilisis leo vel fringilla est ullamcorper eget. At imperdiet dui accumsan sit amet nulla facilities morbi tempus. Praesent elementum facilisis leo vel fringilla. Congue mauris rhoncus aenean vel. Egestas sed tempus urna et pharetra pharetra massa massa ultricies.
+Learn how to implement preview mode in Next.js to allow content editors to see changes before they go live. This guide covers the setup and benefits of using preview mode with static generation.
 
-Venenatis cras sed felis eget velit. Consectetur libero id faucibus nisl tincidunt. Gravida in fermentum et sollicitudin ac orci phasellus egestas tellus. Volutpat consequat mauris nunc congue nisi vitae. Id aliquet risus feugiat in ante metus dictum at tempor. Sed blandit libero volutpat sed cras. Sed odio morbi quis commodo odio aenean sed adipiscing. Velit euismod in pellentesque massa placerat. Mi bibendum neque egestas congue quisque egestas diam in arcu. Nisi lacus sed viverra tellus in. Nibh cras pulvinar mattis nunc sed. Luctus accumsan tortor posuere ac ut consequat semper viverra. Fringilla ut morbi tincidunt augue interdum velit euismod.
+## What is Preview Mode?
 
-## Lorem Ipsum
+Preview mode in Next.js allows you to bypass the static generation and fetch data on every request. This is useful for content editors who need to see changes in real-time before they are published. It enables a dynamic experience on a statically generated site, providing a way to preview drafts or unpublished content.
 
-Tristique senectus et netus et malesuada fames ac turpis. Ridiculous mus mauris vitae ultricies leo integer malesuada nunc vel. In mollis nunc sed id semper. Egestas tellus rutrum tellus pellentesque. Phasellus vestibulum lorem sed risus ultricies tristique nulla. Quis blandit turpis cursus in hac habitasse platea dictumst quisque. Eros donec ac odio tempor orci dapibus ultrices. Aliquam sem et tortor consequat id porta nibh. Adipiscing elit duis tristique sollicitudin nibh sit amet commodo nulla. Diam vulputate ut pharetra sit amet. Ut tellus elementum sagittis vitae et leo. Arcu non odio euismod lacinia at quis risus sed vulputate.
+## Benefits of Preview Mode
+
+1. **Real-time Updates**: Content editors can see changes immediately without waiting for a full site rebuild.
+2. **Draft Previews**: Preview unpublished content or drafts, ensuring everything looks perfect before going live.
+3. **Enhanced Workflow**: Improve the content editing workflow by integrating a seamless preview experience.
+
+## Implementing Preview Mode in Next.js
+
+Implementing preview mode in Next.js involves setting up API routes to enable and disable preview mode and modifying your data fetching logic to account for preview states.
+
+### Step 1: Enabling Preview Mode
+
+Create an API route to enable preview mode. This will set preview cookies.
+
+```javascript
+// pages/api/preview.js
+
+export default function handler(req, res) {
+  // Enable Preview Mode by setting the cookies
+  res.setPreviewData({});
+  // Redirect to the home page or any other page
+  res.writeHead(307, { Location: '/' });
+  res.end();
+}
+```
+
+### Step 2: Disabling Preview Mode
+
+Create an API route to exit preview mode.
+
+```javascript
+// pages/api/exit-preview.js
+
+export default function handler(req, res) {
+  // Clear Preview Mode cookies
+  res.clearPreviewData();
+  // Redirect to the home page or any other page
+  res.writeHead(307, { Location: '/' });
+  res.end();
+}
+```
+
+### Step 3: Fetching Data in Preview Mode
+
+Modify your data fetching functions to check for preview mode and fetch draft content if needed.
+
+```javascript
+// pages/posts/[id].js
+
+import { useRouter } from 'next/router';
+import { getAllPostIds, getPostData, getPreviewPostData } from '../../lib/posts';
+
+export default function Post({ postData }) {
+  return (
+    <article>
+      <h1>{postData.title}</h1>
+      <div dangerouslySetInnerHTML={{ __html: postData.contentHtml }} />
+    </article>
+  );
+}
+
+export async function getStaticPaths() {
+  const paths = getAllPostIds();
+  return {
+    paths,
+    fallback: false
+  };
+}
+
+export async function getStaticProps({ params, preview = false }) {
+  const postData = preview ? await getPreviewPostData(params.id) : await getPostData(params.id);
+  return {
+    props: {
+      postData
+    }
+  };
+}
+```
+
+In this example, the `getStaticProps` function checks if the preview mode is enabled and fetches the appropriate data accordingly.
+
+## Conclusion
+
+Preview mode in Next.js is a powerful feature that enhances the static generation workflow. It allows content editors to preview changes in real-time, improving the accuracy and efficiency of content updates. By integrating preview mode, you can create a more dynamic and responsive content editing experience, ensuring that your static site remains both performant and flexible. 
+
+Implementing preview mode requires a few changes to your API routes and data fetching logic, but the benefits it brings to the content workflow are well worth the effort. Leverage preview mode to streamline your content editing process and ensure that every change is perfect before it goes live.
