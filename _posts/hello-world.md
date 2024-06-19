@@ -1,6 +1,6 @@
 ---
 title: "Learn How to Pre-render Pages Using Static Generation with Next.js"
-excerpt: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Praesent elementum facilisis leo vel fringilla est ullamcorper eget. At imperdiet dui accumsan sit amet nulla facilities morbi tempus."
+excerpt: "Static generation with Next.js allows you to pre-render pages at build time, enhancing performance and SEO. This guide walks you through the process and benefits of using static generation."
 coverImage: "/assets/blog/hello-world/cover.jpg"
 date: "2020-03-16T05:35:07.322Z"
 author:
@@ -10,10 +10,108 @@ ogImage:
   url: "/assets/blog/hello-world/cover.jpg"
 ---
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Praesent elementum facilisis leo vel fringilla est ullamcorper eget. At imperdiet dui accumsan sit amet nulla facilities morbi tempus. Praesent elementum facilisis leo vel fringilla. Congue mauris rhoncus aenean vel. Egestas sed tempus urna et pharetra pharetra massa massa ultricies.
+Static generation with Next.js allows you to pre-render pages at build time, enhancing performance and SEO. This guide walks you through the process and benefits of using static generation.
 
-Venenatis cras sed felis eget velit. Consectetur libero id faucibus nisl tincidunt. Gravida in fermentum et sollicitudin ac orci phasellus egestas tellus. Volutpat consequat mauris nunc congue nisi vitae. Id aliquet risus feugiat in ante metus dictum at tempor. Sed blandit libero volutpat sed cras. Sed odio morbi quis commodo odio aenean sed adipiscing. Velit euismod in pellentesque massa placerat. Mi bibendum neque egestas congue quisque egestas diam in arcu. Nisi lacus sed viverra tellus in. Nibh cras pulvinar mattis nunc sed. Luctus accumsan tortor posuere ac ut consequat semper viverra. Fringilla ut morbi tincidunt augue interdum velit euismod.
+## What is Static Generation?
 
-## Lorem Ipsum
+Static generation refers to the process of generating HTML pages at build time. This approach pre-renders pages and serves them as static files, resulting in faster load times and improved SEO. Unlike server-side rendering, where pages are rendered on each request, static generation builds the pages once and reuses them for every subsequent request.
 
-Tristique senectus et netus et malesuada fames ac turpis. Ridiculous mus mauris vitae ultricies leo integer malesuada nunc vel. In mollis nunc sed id semper. Egestas tellus rutrum tellus pellentesque. Phasellus vestibulum lorem sed risus ultricies tristique nulla. Quis blandit turpis cursus in hac habitasse platea dictumst quisque. Eros donec ac odio tempor orci dapibus ultrices. Aliquam sem et tortor consequat id porta nibh. Adipiscing elit duis tristique sollicitudin nibh sit amet commodo nulla. Diam vulputate ut pharetra sit amet. Ut tellus elementum sagittis vitae et leo. Arcu non odio euismod lacinia at quis risus sed vulputate.
+## Benefits of Static Generation
+
+1. **Performance**: Pre-rendered pages load quickly as they are served directly from a content delivery network (CDN).
+2. **SEO**: Pages are fully rendered at build time, making it easier for search engines to index them.
+3. **Scalability**: Serving static files can handle high traffic without significant server load.
+
+## Implementing Static Generation in Next.js
+
+Next.js makes it straightforward to implement static generation. You can create static pages using the `getStaticProps` and `getStaticPaths` functions.
+
+### Example: Creating a Blog with Static Generation
+
+Here's an example of how to create a blog with static generation using Next.js.
+
+#### Step 1: Fetching Data at Build Time
+
+Use `getStaticProps` to fetch data at build time.
+
+```javascript
+// pages/posts/[id].js
+
+import { getAllPostIds, getPostData } from '../../lib/posts';
+
+export default function Post({ postData }) {
+  return (
+    <article>
+      <h1>{postData.title}</h1>
+      <div dangerouslySetInnerHTML={{ __html: postData.contentHtml }} />
+    </article>
+  );
+}
+
+export async function getStaticPaths() {
+  const paths = getAllPostIds();
+  return {
+    paths,
+    fallback: false
+  };
+}
+
+export async function getStaticProps({ params }) {
+  const postData = await getPostData(params.id);
+  return {
+    props: {
+      postData
+    }
+  };
+}
+```
+
+In this example, `getStaticPaths` generates the paths for all posts at build time, and `getStaticProps` fetches the data needed for each post.
+
+#### Step 2: Generating Paths
+
+The `getStaticPaths` function generates the paths for each post based on the IDs fetched from the data source.
+
+```javascript
+// lib/posts.js
+
+export function getAllPostIds() {
+  const fileNames = fs.readdirSync(postsDirectory);
+  return fileNames.map(fileName => {
+    return {
+      params: {
+        id: fileName.replace(/\.md$/, '')
+      }
+    };
+  });
+}
+```
+
+#### Step 3: Fetching Post Data
+
+The `getStaticProps` function fetches the data for each post at build time.
+
+```javascript
+// lib/posts.js
+
+export async function getPostData(id) {
+  const fullPath = path.join(postsDirectory, `${id}.md`);
+  const fileContents = fs.readFileSync(fullPath, 'utf8');
+
+  // Use gray-matter to parse the post metadata section
+  const matterResult = matter(fileContents);
+
+  // Combine the data with the id
+  return {
+    id,
+    ...matterResult.data,
+    contentHtml: processedContent
+  };
+}
+```
+
+## Conclusion
+
+Static generation with Next.js offers a powerful way to enhance the performance and SEO of your web applications. By pre-rendering pages at build time, you can deliver a faster and more reliable user experience. Whether you're building a blog, an e-commerce site, or a corporate website, static generation can help you achieve your performance and scalability goals.
+
+Understanding and implementing static generation can significantly improve the development workflow and user experience. Leverage Next.js to take full advantage of static generation and build high-performance web applications.
