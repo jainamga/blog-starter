@@ -17,4 +17,10 @@
       <changefreq>weekly</changefreq>
       <priority>0.5</priority>
     </url>
+    <url>
+        <loc>https://www.learnrouting.store/posts/dynamic-routing</loc>
+        <lastmod>2023-04-06T15:02:24.021Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.5</priority>
+      </url>
   </urlset>
