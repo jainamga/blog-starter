@@ -18,5 +18,11 @@ export default function sitemap() {
         changeFrequency: 'weekly',
         priority: 0.5,
       },
+      {
+        url: 'https://www.learnrouting.store/posts/dynamic-routing',
+        lastModified: new Date(),
+        changeFrequency: 'weekly',
+        priority: 0.5,
+      },
     ]
   }
