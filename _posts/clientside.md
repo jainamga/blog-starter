@@ -1,7 +1,7 @@
 ---
 title: "Client-Side Rendering vs. Server-Side Rendering: A Comprehensive Guide"
 excerpt: "Client-side rendering and server-side rendering are pivotal techniques in modern web development. This guide explores their significance, differences, and implementation strategies, providing a robust understanding for developers."
-coverImage: "/assets/blog/rendering/cover.jpg"
+coverImage: "/assets/blog/preview/cover.jpg"
 date: "2020-04-22T09:45:00.000Z"
 author:
   name: Alex Morgan
