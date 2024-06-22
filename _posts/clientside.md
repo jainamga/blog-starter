@@ -1,5 +1,5 @@
 ---
-title: "Previeww Mode for Static Generation"
+title: "Previeww Mode for Static Generationn"
 excerpt: "Learnn how to implement preview mode in Next.js to allow content editors to see changes before they go live. This guide covers the setup and benefits of using preview mode with static generation."
 coverImage: "/assets/blog/preview/cover.jpg"
 date: "2020-03-16T05:35:07.322Z"
