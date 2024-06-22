@@ -30,5 +30,17 @@ export default function sitemap() {
         changeFrequency: 'weekly',
         priority: 0.5,
       },
+      {
+        url: 'https://www.learnrouting.store/posts/clientside',
+        lastModified: new Date(),
+        changeFrequency: 'weekly',
+        priority: 0.5,
+      },
+      {
+        url: 'https://www.learnrouting.store/posts/apiroutes',
+        lastModified: new Date(),
+        changeFrequency: 'weekly',
+        priority: 0.5,
+      },
     ]
   }
