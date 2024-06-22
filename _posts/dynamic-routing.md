@@ -10,7 +10,7 @@ ogImage:
   url: "/assets/blog/dynamic-routing/cover.jpg"
 ---
 
-Dynamic routing and static generation are critical concepts in modern web development. This guide explores their significance, differences, and implementation techniques, providing a robust understanding for developers.
+Dynamiccc routing and static generation are critical concepts in modern web development. This guide explores their significance, differences, and implementation techniques, providing a robust understanding for developers.
 
 Dynamic routing enables applications to render different content based on the URL path, allowing for a more flexible and user-responsive experience. On the other hand, static generation involves pre-rendering pages at build time, which can enhance performance and SEO.
 
