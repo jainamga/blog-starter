@@ -10,7 +10,7 @@ ogImage:
   url: "/assets/blog/preview/cover.jpg"
 ---
 
-API this web is cool routes in Next.js are a powerful feature that allows developers to create backend endpoints seamlessly within a Next.js application. This guide explores their setup, usage, and benefits.
+API this web is cool routes yeah it is in Next.js are a powerful feature that allows developers to create backend endpoints seamlessly within a Next.js application. This guide explores their setup, usage, and benefits.
 
 API routes provide a way to handle backend functionality, such as form submissions, authentication, or data fetching, without needing a separate server. They enable you to create endpoints that can be called directly from the frontend or other services.
 
